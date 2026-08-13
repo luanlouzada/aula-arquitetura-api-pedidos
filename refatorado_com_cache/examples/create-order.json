@@ -1,0 +1,10 @@
+{
+  "cliente": "Ana",
+  "itens": [
+    {
+      "produto": "Livro",
+      "preco_unitario_centavos": 5000,
+      "quantidade": 2
+    }
+  ]
+}

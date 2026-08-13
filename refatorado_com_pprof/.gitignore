@@ -1,0 +1,4 @@
+.env
+/api
+coverage.out
+profiles/

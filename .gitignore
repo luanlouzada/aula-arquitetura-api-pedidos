@@ -1,0 +1,12 @@
+.idea/
+.vscode/
+.DS_Store
+.env
+.env.*
+!.env.example
+coverage.out
+coverage.html
+*.test
+*.pprof
+*.log
+profiles/

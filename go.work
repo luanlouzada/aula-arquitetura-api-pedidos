@@ -1,0 +1,10 @@
+go 1.26.4
+
+use (
+	./contract-tests
+	./legado
+	./refatorado
+	./refatorado_com_cache
+	./refatorado_com_pprof
+	./refatorado_com_slog
+)
