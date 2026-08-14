@@ -1,7 +1,9 @@
 go 1.26.4
 
 use (
+	./aula-fila-worker-pool
 	./contract-tests
+	./exercicio
 	./legado
 	./refatorado
 	./refatorado_com_cache
