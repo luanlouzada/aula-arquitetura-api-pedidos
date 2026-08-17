@@ -6,6 +6,14 @@ Este repositório apresenta **uma única API** em três versões:
 - `refatorado`: o contrato HTTP permanece igual, mas o código é separado em domínio, aplicação, camada HTTP e infraestrutura;
 - `refatorado_com_slog`: uma cópia do refatorado com configuração e logs estruturados em JSON usando apenas a biblioteca padrão do Go.
 
+O repositório também possui laboratórios independentes usados nas aulas de
+concorrência e operação:
+
+- [`aula-fila-worker-pool`](aula-fila-worker-pool/README.md): referência de fila limitada e worker pool;
+- [`exercicio`](exercicio/README.md): exercício introdutório da cozinha, com TODOs de fila e workers;
+- [`aula-08-confiabilidade`](aula-08-confiabilidade/README.md): referência completa com token bucket, NGINX, três instâncias, health checks, métricas e graceful shutdown;
+- [`exercicio-aula-08`](exercicio-aula-08/README.md): exercício equivalente no domínio de exportação de relatórios, com TODOs e testes orientadores.
+
 Legado e refatorado usam o PostgreSQL do `compose.yaml` da raiz. A versão com `slog` possui um Compose independente e pode ser executada isoladamente.
 
 ## Contrato da API

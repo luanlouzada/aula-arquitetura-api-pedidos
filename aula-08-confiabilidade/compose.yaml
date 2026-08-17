@@ -1,0 +1,59 @@
+x-api: &api
+  build:
+    context: .
+    dockerfile: Dockerfile
+  environment: &api-environment
+    API_ADDR: :8080
+    WORKERS: ${WORKERS:-2}
+    QUEUE_CAPACITY: ${QUEUE_CAPACITY:-10}
+    PROCESSING_TIME: ${PROCESSING_TIME:-250ms}
+    RATE_LIMIT_RPS: ${RATE_LIMIT_RPS:-8}
+    RATE_LIMIT_BURST: ${RATE_LIMIT_BURST:-4}
+    DRAIN_DELAY: ${DRAIN_DELAY:-1s}
+    SHUTDOWN_TIMEOUT: ${SHUTDOWN_TIMEOUT:-10s}
+  healthcheck:
+    test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:8080/readyz"]
+    interval: 2s
+    timeout: 1s
+    retries: 10
+  stop_grace_period: 12s
+  restart: "no"
+
+services:
+  api-1:
+    <<: *api
+    environment:
+      <<: *api-environment
+      INSTANCE_ID: api-1
+    ports:
+      - "8081:8080"
+
+  api-2:
+    <<: *api
+    environment:
+      <<: *api-environment
+      INSTANCE_ID: api-2
+    ports:
+      - "8082:8080"
+
+  api-3:
+    <<: *api
+    environment:
+      <<: *api-environment
+      INSTANCE_ID: api-3
+    ports:
+      - "8083:8080"
+
+  nginx:
+    build:
+      context: deploy/nginx
+    depends_on:
+      api-1:
+        condition: service_healthy
+      api-2:
+        condition: service_healthy
+      api-3:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    restart: "no"

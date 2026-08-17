@@ -1,0 +1,59 @@
+x-exporter: &exporter
+  build:
+    context: .
+    dockerfile: Dockerfile
+  environment: &exporter-environment
+    API_ADDR: :8080
+    WORKERS: ${WORKERS:-2}
+    QUEUE_CAPACITY: ${QUEUE_CAPACITY:-10}
+    GENERATION_TIME: ${GENERATION_TIME:-250ms}
+    RATE_LIMIT_RPS: ${RATE_LIMIT_RPS:-8}
+    RATE_LIMIT_BURST: ${RATE_LIMIT_BURST:-4}
+    DRAIN_DELAY: ${DRAIN_DELAY:-1s}
+    SHUTDOWN_TIMEOUT: ${SHUTDOWN_TIMEOUT:-10s}
+  healthcheck:
+    test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:8080/readyz"]
+    interval: 2s
+    timeout: 1s
+    retries: 10
+  stop_grace_period: 12s
+  restart: "no"
+
+services:
+  exporter-1:
+    <<: *exporter
+    environment:
+      <<: *exporter-environment
+      INSTANCE_ID: exporter-1
+    ports:
+      - "8091:8080"
+
+  exporter-2:
+    <<: *exporter
+    environment:
+      <<: *exporter-environment
+      INSTANCE_ID: exporter-2
+    ports:
+      - "8092:8080"
+
+  exporter-3:
+    <<: *exporter
+    environment:
+      <<: *exporter-environment
+      INSTANCE_ID: exporter-3
+    ports:
+      - "8093:8080"
+
+  nginx:
+    build:
+      context: deploy/nginx
+    depends_on:
+      exporter-1:
+        condition: service_healthy
+      exporter-2:
+        condition: service_healthy
+      exporter-3:
+        condition: service_healthy
+    ports:
+      - "8090:80"
+    restart: "no"

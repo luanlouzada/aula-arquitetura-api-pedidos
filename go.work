@@ -1,9 +1,11 @@
 go 1.26.4
 
 use (
+	./aula-08-confiabilidade
 	./aula-fila-worker-pool
 	./contract-tests
 	./exercicio
+	./exercicio-aula-08
 	./legado
 	./refatorado
 	./refatorado_com_cache
